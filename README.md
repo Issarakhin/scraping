@@ -72,7 +72,6 @@ pip install requests beautifulsoup4
 webscraping/
 ├── scrape.py
 ├── README.md
-├── requirements.txt
 └── kampucheathmey_articles/
 ```
 
