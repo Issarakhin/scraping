@@ -1,17 +1,24 @@
 # Kampuchea Thmey News Scraper
 
-A BeautifulSoup-based web scraper for **Kampuchea Thmey** that extracts news articles from the site's main categories and saves each article as a clean Markdown file.
+A BeautifulSoup-based web scraper for **Kampuchea Thmey** that automatically discovers the website's main news categories, scrapes articles from each category, extracts article metadata and content, and saves every article as a clean Markdown file.
+
+---
 
 ## Features
 
-- Automatic category discovery — finds all main news categories from the homepage
-- Category-based scraping — scrapes articles from every discovered category
-- Category validation — only collects articles that belong to the current category (e.g. `/local-news/*` for Local News)
-- Metadata extraction — title, URL, publication date, author
-- Article content extraction — removes unnecessary HTML and extracts only the article body
-- Markdown output — saves every article as an individual Markdown file
-- Duplicate prevention — avoids collecting duplicate article links
-- Configurable scraping — choose how many articles to scrape per category
+- Automatic category discovery from the Kampuchea Thmey homepage
+- Scrapes articles from all main news categories
+- Category-aware scraping (only collects articles belonging to the selected category)
+- Metadata extraction
+  - Title
+  - URL
+  - Publication date
+  - Author
+- Article body extraction
+- Markdown output (one file per article)
+- Duplicate article filtering
+- Configurable number of articles per category
+- Uses a Chrome User-Agent for HTTP requests
 
 ---
 
@@ -27,48 +34,39 @@ A BeautifulSoup-based web scraper for **Kampuchea Thmey** that extracts news art
 ## macOS
 
 ```bash
-# Install Python
 brew install python
 
-# Clone repository
 git clone <your-repository-url>
 cd kampucheathmey-scraper
 
-# Create virtual environment
 python3 -m venv venv
 source venv/bin/activate
 
-# Install dependencies
 pip install requests beautifulsoup4
 ```
 
 ## Windows (PowerShell)
 
 ```powershell
-# Install Python from
-https://python.org
-
-# Clone repository
 git clone <your-repository-url>
+
 cd kampucheathmey-scraper
 
-# Create virtual environment
 python -m venv venv
 
-# Activate
 .\venv\Scripts\Activate.ps1
 
-# Install dependencies
 pip install requests beautifulsoup4
 ```
 
-## Linux (Ubuntu/Debian)
+## Linux
 
 ```bash
 sudo apt update
 sudo apt install python3 python3-pip python3-venv
 
 git clone <your-repository-url>
+
 cd kampucheathmey-scraper
 
 python3 -m venv venv
@@ -88,32 +86,32 @@ Run the scraper
 python scrape.py
 ```
 
-The scraper will
+The scraper will automatically
 
 1. Discover all available news categories.
-2. Visit each category page.
-3. Collect article links that belong to that category.
+2. Visit every category page.
+3. Collect article URLs that belong to the current category.
 4. Visit each article.
-5. Extract metadata and article content.
-6. Save each article as a Markdown file.
+5. Extract article metadata and content.
+6. Save each article as an individual Markdown file.
 
 ---
 
 # Configuration
 
-Change the number of articles scraped from each category.
+Number of articles scraped from each category
 
 ```python
 articles_per_category = 3
 ```
 
-Change the delay between requests.
+Delay between requests
 
 ```python
 delay = 2
 ```
 
-Change the output directory.
+Output directory
 
 ```python
 output_directory = "kampucheathmey_articles"
@@ -126,7 +124,7 @@ output_directory = "kampucheathmey_articles"
 ```
 Found 15 categories.
 
-========================================================
+============================================================
 
 Category: ព័ត៌មានជាតិ
 
@@ -149,23 +147,33 @@ kampucheathmey_articles/local-news/article1.md
 ```
 kampucheathmey_articles/
 
-├── local-news/
-│   ├── article1.md
-│   ├── article2.md
-│   └── article3.md
+├── announcement/
+│
+├── belief/
+│
+├── business-economic/
+│
+├── commentary/
+│
+├── entertainment/
 │
 ├── global-news/
-│   ├── article1.md
-│   ├── article2.md
-│   └── article3.md
+│
+├── health/
+│
+├── local-news/
 │
 ├── politics/
+│
+├── profession-work/
+│
+├── security/
 │
 ├── sports/
 │
 ├── tech/
 │
-└── ...
+└── traffic/
 ```
 
 ---
@@ -177,17 +185,17 @@ Each article is saved as
 ```markdown
 # Article Title
 
-> **URL**: https://www.kampucheathmey.com/local-news/1162333
-> **Date**: 2026-08-03
-> **Author**: Reporter Name
+> **URL:** https://www.kampucheathmey.com/local-news/1162333
+> **Date:** 2026-08-03
+> **Author:** Reporter Name
 
 ---
 
-First paragraph of the article.
+Article paragraph one.
 
-Second paragraph.
+Article paragraph two.
 
-Third paragraph.
+Article paragraph three.
 ```
 
 ---
@@ -196,19 +204,23 @@ Third paragraph.
 
 ### 1. Category Discovery
 
-The scraper requests the Kampuchea Thmey homepage and automatically collects all navigation links matching the format
+The scraper requests the Kampuchea Thmey homepage and automatically discovers all news categories whose URLs follow the format
 
 ```
 /category/*
 ```
 
-Examples
+For example
 
 ```
 /category/local-news
+
 /category/global-news
+
 /category/politics
+
 /category/business-economic
+
 /category/sports
 ```
 
@@ -218,15 +230,17 @@ Examples
 
 Each category page is visited individually.
 
-Only article URLs that belong to the current category are collected.
+The scraper only accepts article URLs that belong to the current category.
 
-For example, when scraping
+Example
+
+Category
 
 ```
 /category/local-news
 ```
 
-the scraper accepts
+Accepted
 
 ```
 /local-news/1162333
@@ -234,29 +248,29 @@ the scraper accepts
 /local-news/1161980
 ```
 
-and ignores unrelated links such as
+Ignored
 
 ```
 /security/1162181
-/sports/1161200
-/global-news/1160500
+/global-news/1160105
+/sports/1160421
 ```
 
-This prevents sidebar, trending, and recommended articles from being scraped.
+This prevents unrelated sidebar and recommended articles from being scraped.
 
 ---
 
 ### 3. Article Extraction
 
-For every article, BeautifulSoup extracts
+For every article page, BeautifulSoup extracts
 
 - Title
 - URL
 - Publication date
 - Author
-- Main article content
+- Main article body
 
-Unnecessary HTML elements such as scripts, advertisements, navigation bars, sidebars, and embedded content are ignored.
+Non-content elements such as advertisements, scripts, navigation menus, sidebars, and embedded content are removed before extracting the article text.
 
 ---
 
@@ -279,14 +293,10 @@ Each article is converted into a Markdown document and saved inside its correspo
 
 # Notes
 
-- Uses a Chrome User-Agent for requests.
+- Uses a Chrome browser User-Agent.
 - Automatically discovers categories from the homepage.
 - Prevents duplicate article URLs.
 - Saves each article as an individual Markdown file.
-- Designed for educational and research purposes.
+- The number of scraped articles per category can be configured.
 
 ---
-
-# Disclaimer
-
-This project is intended for educational and research purposes only. Please respect Kampuchea Thmey's Terms of Service, robots.txt, and applicable copyright laws when scraping or redistributing website content.
