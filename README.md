@@ -22,61 +22,14 @@ A BeautifulSoup-based web scraper for **Kampuchea Thmey** that automatically dis
 
 ---
 
-# Requirements
+# Programing language
 
-- Python 3.9+
-- Internet connection
+- Python 3.11
 
----
-
-# Environment Setup
-
-## macOS
-
-```bash
-brew install python
-
-git clone <your-repository-url>
-cd kampucheathmey-scraper
-
-python3 -m venv venv
-source venv/bin/activate
-
-pip install requests beautifulsoup4
-```
-
-## Windows (PowerShell)
-
-```powershell
-git clone <your-repository-url>
-
-cd kampucheathmey-scraper
-
-python -m venv venv
-
-.\venv\Scripts\Activate.ps1
-
-pip install requests beautifulsoup4
-```
-
-## Linux
-
-```bash
-sudo apt update
-sudo apt install python3 python3-pip python3-venv
-
-git clone <your-repository-url>
-
-cd kampucheathmey-scraper
-
-python3 -m venv venv
-
-source venv/bin/activate
-
-pip install requests beautifulsoup4
-```
 
 ---
+
+
 
 # Usage
 
@@ -86,7 +39,8 @@ Run the scraper
 python scrape.py
 ```
 
-The scraper will automatically
+
+The scraper  will automatically
 
 1. Discover all available news categories.
 2. Visit every category page.
